@@ -22,6 +22,7 @@ body {
 
 .main-container div {
   margin-top: 5vh;
+  text-align: center;
 }
 
 #city-name-box {

@@ -11,8 +11,9 @@ function calcTime(offset) {
   return nd.toDateString();
 }
 
+const input = document.getElementById('city-name-box');
+
 function weatherFetch() {
-  const input = document.getElementById('city-name-box');
   var city = input.value;
 
   fetch(
@@ -23,8 +24,10 @@ function weatherFetch() {
     })
     .then((resp) => {
       const container = document.querySelector('.main-container');
+      console.log(resp);
 
-      container.innerHTML += `
+      if (resp.cod == 200) {
+        container.innerHTML = `
         <div id="city-name">
           <h3>${resp.name}, ${resp.sys.country}</h3>
           <p>${calcTime(resp.timezone / 3600)}</p>
@@ -36,11 +39,27 @@ function weatherFetch() {
 
         <div id="min-max">
           <h3>${resp.weather[0].main}</h3>
-          <p>${Math.floor(resp.main.temp_max - 273)}°c / ${Math.floor(
-        resp.main.temp_min - 273
-      )}°c</p>
+          <p>${Math.floor(resp.main.temp_min - 273)}°c / ${Math.floor(
+          resp.main.temp_max - 273
+        )}°c</p>
         </div>`;
+      } else {
+        container.innerHTML = `
+        <div id="city-name">
+          <h3>Please enter a valid city/country name</h3>
+        </div>`;
+      }
     });
+
+  document.getElementById('button').style.borderBottom = 'none';
+  setTimeout(() => {
+    document.getElementById('button').style.borderBottom =
+      '4px solid rgba(255, 255, 255, 0.5)';
+  }, 100);
 }
 
-weatherFetch();
+input.addEventListener('keydown', (e) => {
+  if (e.code == 'Enter') {
+    weatherFetch();
+  }
+});

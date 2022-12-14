@@ -12,21 +12,19 @@ function calcTime(offset) {
 }
 
 function weatherFetch() {
+  const input = document.getElementById('city-name-box')
+  var city = input.value
+
   fetch(
-    'https://api.openweathermap.org/data/2.5/weather?q=Washington&appid=a93062c563cc61e1b58ef6f77d9e3bef'
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a93062c563cc61e1b58ef6f77d9e3bef`
   )
     .then((resp) => {
       return resp.json();
     })
     .then((resp) => {
-      const container = document.createElement('div');
-      container.setAttribute('class', 'main-container');
+      const container = document.querySelector('.main-container');
 
-      container.innerHTML = `
-        <div id="city-name-box">
-          <h4>${resp.name}</h4>
-        </div>
-
+      container.innerHTML += `
         <div id="city-name">
           <h3>${resp.name}, ${resp.sys.country}</h3>
           <p>${calcTime(resp.timezone / 3600)}</p>
@@ -42,8 +40,6 @@ function weatherFetch() {
         resp.main.temp_min - 273
       )}°c</p>
         </div>`;
-
-      document.body.append(container);
     });
 }
 
